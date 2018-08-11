@@ -1,1 +1,1 @@
-worker: python joins-test.py
+worker: python joins_test.py

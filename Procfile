@@ -1,1 +1,1 @@
-worker: python joins_test.py
+web: gunicorn app:app

@@ -7,9 +7,31 @@ df=pd.read_csv("test_data_2.csv")
 max_id = max(df["movie_id"])
 min_id = min(df["movie_id"])
 
+print("Starting...")
+t0=time.time()
 movies = {}
-for i in range(min_id,max_id+1):
-    movies[i] = df[df["movie_id"]==i].drop(["movie_id"],axis=1).set_index("user_id")
+
+ids = list(df["movie_id"])
+prev_id = 0
+c = 0
+c0 = 0
+for i in ids:
+    if i != prev_id:
+        movies[prev_id]=df.iloc[c0:c].drop(["movie_id"],axis=1).set_index("user_id")
+        prev_id = i
+        c0 = c
+    # if c%100000==0:
+    #     print(i, "records...")
+    c += 1
+
+movies[ids[-1]]=df.iloc[c0:].drop(["movie_id"],axis=1).set_index("user_id")
+
+# for i in range(min_id,max_id+1):
+#     movies[i] = df[df["movie_id"]==i].drop(["movie_id"],axis=1).set_index("user_id")
+
+t1=time.time()
+print(round(t1-t0,3))
+print(movies[4600]["movie_id"].value_counts())
 
 def rough_means_v1(df, id1, id2, movie_dict=None, col_norm=50, low_clip=0):
     if movie_dict is None:

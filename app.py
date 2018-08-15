@@ -3,11 +3,19 @@ from flask import flash, jsonify, redirect, render_template, request, url_for
 import pandas as pd
 import numpy as np
 import png
+import pickle
 
 import load_means as lm
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
+
+print("Loading data...")
+# means_matrix_1k = lm.png_to_matrix("sparse_means_1k.png")
+with open("means_matrix_dump",'rb') as mmd:
+    means_matrix_1k = pickle.load(mmd)
+ids_1k = list(pd.read_csv("movie_ids_1k.csv")["movie_id"])
+print("Loaded!")
 
 @app.route('/')
 def hello_world():
@@ -26,8 +34,3 @@ def string_to_input_list(string):
 if __name__ == "__main__":
     print("OK, this works as expected")
     app.run(debug=0)
-
-print("Loading data...")
-means_matrix_1k = lm.png_to_matrix("sparse_means_1k.png")
-ids_1k = list(pd.read_csv("movie_ids_1k.csv")["movie_id"])
-print("Loaded!")
